@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: control
+  labels:
+    app: control
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: control
+    spec:
+      containers:
+      - name: control
+        image: nginx:latest
+        volumeMounts:
+        - name: another-a
+          mountPath: "/data/another-a"
+        - name: another-b
+          mountPath: "/data/another-b"
+        - name: another-c
+          mountPath: "/data/another-c"
+        # - name: another-d
+        #   mountPath: "/data/another-d"
+        # - name: another-e
+        #   mountPath: "/data/another-e"
+      volumes:
+        - name: another-a
+          persistentVolumeClaim:
+            claimName: another-a
+        - name: another-b
+          persistentVolumeClaim:
+            claimName: another-b
+        - name: another-c
+          persistentVolumeClaim:
+            claimName: another-c
+        # - name: another-d
+        #   persistentVolumeClaim:
+        #     claimName: another-d
+        # - name: another-e
+        #   persistentVolumeClaim:
+        #     claimName: another-e
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: glusterfs-test

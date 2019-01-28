@@ -1,0 +1,68 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: heketi
+  labels:
+    app: heketi
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+spec:
+  type: LoadBalancer
+  selector:
+    app: heketi
+  ports:
+  - name: heketi
+    port: 8080
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: heketi
+  labels:
+    app: heketi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heketi
+  template:
+    metadata:
+      name: heketi
+      labels:
+        app: heketi
+    spec:
+      serviceAccount: heketi-bootstrapper
+      containers:
+      - name: heketi
+        image: heketi/heketi:7
+        command:
+          - heketi
+          - --config=/etc/heketi/heketi.json
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: db
+          mountPath: "/var/lib/heketi"
+        - name: config
+          mountPath: /etc/heketi
+        readinessProbe:
+          timeoutSeconds: 3
+          initialDelaySeconds: 3
+          httpGet:
+            path: "/hello"
+            port: 8080
+        livenessProbe:
+          timeoutSeconds: 3
+          initialDelaySeconds: 30
+          httpGet:
+            path: "/hello"
+            port: 8080
+      volumes:
+      - name: db
+        glusterfs:
+          endpoints: heketi-storage-endpoints
+          path: heketidbstorage
+      - name: config
+        secret:
+          secretName: heketi-mgmt

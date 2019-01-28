@@ -1,0 +1,45 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: example-pvc
+  namespace: storage
+  annotations:
+    volume.beta.kubernetes.io/storage-class: gluster
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: example-pvc
+  namespace: storage
+  labels:
+    app: test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example-pvc
+  template:
+    metadata:
+      name: heketi
+      labels:
+        app: example-pvc
+    spec:
+      containers:
+      - name: alpine
+        image: alpine:latest
+        command:
+          - /bin/sleep
+          - "3600"
+        volumeMounts:
+        - name: db
+          mountPath: "/var/lib/data"
+      volumes:
+        - name: db
+          persistentVolumeClaim:
+            claimName: example-pvc

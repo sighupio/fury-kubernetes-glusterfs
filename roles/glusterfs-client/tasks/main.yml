@@ -1,0 +1,19 @@
+---
+
+- name: enabling the right kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - fuse
+    - dm_snapshot
+    - dm_mirror
+    - dm_thin_pool
+
+- name: installing glusterfs-client on all nodes
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+  - attr
+  - glusterfs-client

@@ -1,0 +1,11 @@
+namespace: storage
+
+resources:
+  - job.yml
+  - rbac.yml
+  - heketi.yml
+
+configMapGenerator:
+  - name: bootstrap
+    files:
+    - bootstrap.sh

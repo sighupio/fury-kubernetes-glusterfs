@@ -1,0 +1,47 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: heketi-k8s-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: heketi.rules
+    rules:
+    - alert: GlusterNodeDown
+      annotations:
+        message: 'Gluster Node {{ $labels.instance }} has disappered from
+          Prometheus target discovery.'
+        doc: "This alert fires if Prometheus target discovery was not able to
+          reach gluster-node-exporter in the last 3 minutes."
+      expr: |
+        absent(up{job="gluster-node-exporter"} == 1)
+      for: 3m
+      labels:
+        severity: critical
+    - alert: HeketiDown
+      annotations:
+        message: 'Heketi has disappeared from Prometheus target discovery.'
+        doc: "This alert fires if Prometheus target discovery was not able to
+          reach Heketi in the last 3 minutes."
+      expr: |
+        absent(up{job="heketi"} == 1)
+      for: 3m
+      labels:
+        severity: critical
+    - alert: HeketiDeviceRunningFull
+      annotations:
+        message: 'Device {{ $labels.device }} of Gluster node
+          {{ $labels.hostname }} is running full within the next 48 hours.'
+        doc: "This alert fires if in the last 30 minutes the Heketi volume usage
+          was more than 85% and, based on a linear prediction on the
+          volume usage in the last 6 hours, the volume will be full in 48
+          hours."
+      expr: |
+        ((heketi_device_used / heketi_device_size) > 0.85) and
+        (predict_linear(heketi_device_free[6h], 3600 * 24 * 2) < 0)
+      for: 30m
+      labels:
+        severity: warning

@@ -1,0 +1,132 @@
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: another-a
+  labels:
+    app: another-a
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: another-a
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        volumeMounts:
+        - name: data
+          mountPath: "/usr/share/nginx/html"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: another-a
+---
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: another-b
+  labels:
+    app: another-b
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: another-b
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        volumeMounts:
+        - name: data
+          mountPath: "/usr/share/nginx/html"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: another-b
+---
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: another-c
+  labels:
+    app: another-c
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: another-c
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        volumeMounts:
+        - name: data
+          mountPath: "/usr/share/nginx/html"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: another-c
+# ---
+# kind: Deployment
+# apiVersion: apps/v1beta1
+# metadata:
+#   name: another-d
+#   labels:
+#     app: another-d
+# spec:
+#   replicas: 3
+#   template:
+#     metadata:
+#       labels:
+#         app: another-d
+#     spec:
+#       containers:
+#       - name: nginx
+#         image: nginx:latest
+#         volumeMounts:
+#         - name: data
+#           mountPath: "/usr/share/nginx/html"
+#       volumes:
+#         - name: data
+#           persistentVolumeClaim:
+#             claimName: another-d
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: another-e
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: gluster
+# spec:
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 30Gi
+# ---
+# kind: Deployment
+# apiVersion: apps/v1beta1
+# metadata:
+#   name: another-e
+#   labels:
+#     app: another-e
+# spec:
+#   replicas: 3
+#   template:
+#     metadata:
+#       labels:
+#         app: another-e
+#     spec:
+#       containers:
+#       - name: nginx
+#         image: nginx:latest
+#         volumeMounts:
+#         - name: data
+#           mountPath: "/usr/share/nginx/html"
+#       volumes:
+#         - name: data
+#           persistentVolumeClaim:
+#             claimName: another-e

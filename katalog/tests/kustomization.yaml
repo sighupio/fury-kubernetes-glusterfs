@@ -1,0 +1,6 @@
+namespace: glusterfs-test
+
+resources:
+  - control.yml
+  - downloader.yml
+  - pvc.yml

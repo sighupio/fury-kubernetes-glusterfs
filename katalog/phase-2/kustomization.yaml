@@ -1,0 +1,6 @@
+namespace: storage
+
+resources:
+  - heketi.yml
+  - rules.yml
+  - sm.yml

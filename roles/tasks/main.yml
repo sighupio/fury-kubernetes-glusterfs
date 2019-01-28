@@ -1,0 +1,41 @@
+---
+
+- name: installing glusterd dependency
+  apt:
+    update_cache: yes
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - software-properties-common
+    - thin-provisioning-tools
+    - xfsprogs
+    - attr
+
+- name: adding glusterd repository
+  apt_repository:
+    repo: ppa:gluster/glusterfs-4.0
+    state: present
+
+- name: installing glusterd
+  apt:
+    update_cache: yes
+    name: glusterfs-server
+    state: latest
+
+- name: enabling the right kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - fuse
+    - dm_snapshot
+    - dm_mirror
+    - dm_thin_pool
+
+- name: enabling and restarting glusterd
+  systemd:
+    name: glusterd
+    enabled: yes
+    daemon_reload: yes
+    state: restarted
+

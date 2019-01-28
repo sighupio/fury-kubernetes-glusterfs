@@ -1,0 +1,177 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: another-a
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: heketi
+          image: sighup/etcdctl-aws:latest
+          command:
+            - /bin/sh
+            - -c
+            # - aws s3 --no-sign-request cp s3://open-images-dataset/tar/train_6.tar.gz /data/train # 30GB
+            - aws s3 --no-sign-request cp s3://open-images-dataset/tar/challenge2018.tar.gz /data/train # 10GB
+          volumeMounts:
+          - name: data
+            mountPath: "/data"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: another-a
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: downloader-b
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: heketi
+          image: sighup/etcdctl-aws:latest
+          command:
+            - /bin/sh
+            - -c
+            # - aws s3 --no-sign-request cp s3://open-images-dataset/tar/train_6.tar.gz /data/train # 30GB
+            - aws s3 --no-sign-request cp s3://open-images-dataset/tar/challenge2018.tar.gz /data/train # 10GB
+          volumeMounts:
+          - name: data
+            mountPath: "/data"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: another-b
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: downloader-c
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: heketi
+          image: sighup/etcdctl-aws:latest
+          command:
+            - /bin/sh
+            - -c
+            # - aws s3 --no-sign-request cp s3://open-images-dataset/tar/train_6.tar.gz /data/train # 30GB
+            - aws s3 --no-sign-request cp s3://open-images-dataset/tar/challenge2018.tar.gz /data/train # 10GB
+          volumeMounts:
+          - name: data
+            mountPath: "/data"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: another-c
+# ---
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: downloader-d
+# spec:
+#   parallelism: 1
+#   completions: 1
+#   template:
+#     spec:
+#       restartPolicy: Never
+#       containers:
+#         - name: heketi
+#           image: sighup/etcdctl-aws:latest
+#           command:
+#             - /bin/sh
+#             - -c
+#             - aws s3 --no-sign-request cp s3://open-images-dataset/tar/train_9.tar.gz /data/train
+#           volumeMounts:
+#           - name: data
+#             mountPath: "/data"
+#       volumes:
+#         - name: data
+#           persistentVolumeClaim:
+#             claimName: another-d
+# ---
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: downloader-e
+# spec:
+#   parallelism: 1
+#   completions: 1
+#   template:
+#     spec:
+#       restartPolicy: Never
+#       containers:
+#         - name: heketi
+#           image: sighup/etcdctl-aws:latest
+#           command:
+#             - /bin/sh
+#             - -c
+#             - aws s3 --no-sign-request cp s3://open-images-dataset/tar/train_a.tar.gz /data/train
+#           volumeMounts:
+#           - name: data
+#             mountPath: "/data"
+#       volumes:
+#         - name: data
+#           persistentVolumeClaim:
+#             claimName: another-e
+# ---
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: downloader-nginx
+# spec:
+#   parallelism: 1
+#   completions: 1
+#   template:
+#     spec:
+#       restartPolicy: Never
+#       containers:
+#         - name: heketi
+#           image: sighup/etcdctl-aws:latest
+#           command:
+#             - /bin/sh
+#             - -c
+#             - aws s3 --no-sign-request cp s3://open-images-dataset/tar/train_b.tar.gz /data/train
+#           volumeMounts:
+#           - name: data
+#             mountPath: "/data"
+#       volumes:
+#         - name: data
+#           persistentVolumeClaim:
+#             claimName: another-f
+# ---
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: downloader-another
+# spec:
+#   parallelism: 1
+#   completions: 1
+#   template:
+#     spec:
+#       restartPolicy: Never
+#       containers:
+#         - name: heketi
+#           image: sighup/etcdctl-aws:latest
+#           command:
+#             - /bin/sh
+#             - -c
+#             - aws s3 --no-sign-request cp s3://open-images-dataset/tar/train_c.tar.gz /data/train
+#           volumeMounts:
+#           - name: data
+#             mountPath: "/data"
+#       volumes:
+#         - name: data
+#           persistentVolumeClaim:
+#             claimName: another-g

@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-heketi
+spec:
+  parallelism: 1
+  completions: 1
+  activeDeadlineSeconds: 600
+  template:
+    spec:
+      serviceAccountName: heketi-bootstrapper
+      restartPolicy: Never
+      containers:
+        - name: heketi
+          image: sighup/heketi-kubectl:7
+          env:
+            - name: HEKETI_CLI_USER
+              value: admin
+            - name: HEKETI_CLI_SERVER
+              value: http://heketi-bootstrap:8080
+            - name: HEKETI_CLI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: heketi-admin-pwd
+                  key: token
+            - name: TOPOLOGY_PATH
+              value: /etc/heketi/topology.json
+          command:
+            - /bin/bash
+            - /home/bin/bootstrap.sh
+          volumeMounts:
+            - name: config
+              mountPath: /etc/heketi
+            - name: bootstrap
+              mountPath: /home/bin
+      volumes:
+        - name: config
+          secret:
+            secretName: heketi-mgmt
+        - name: bootstrap
+          configMap:
+            name: bootstrap
