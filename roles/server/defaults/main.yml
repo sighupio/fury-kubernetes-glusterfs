@@ -1,0 +1,14 @@
+---
+
+glusterfs_server_dependencies:
+  - attr
+  - lvm2
+  - software-properties-common
+  - thin-provisioning-tools
+  - xfsprogs
+
+glusterfs_server_modules:
+  - dm_mirror
+  - dm_snapshot
+  - dm_thin_pool
+  - fuse
