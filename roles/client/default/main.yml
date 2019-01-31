@@ -1,0 +1,11 @@
+---
+
+glusterfs_client_dependencies:
+  - attr
+  - glusterfs-client
+
+glusterfs_client_modules:
+  - dm_mirror
+  - dm_snapshot
+  - dm_thin_pool
+  - fuse
