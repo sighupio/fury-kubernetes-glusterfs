@@ -2,7 +2,7 @@
 
 
 # Topology changes
-The topology.json file defines what resources are available to heketi to provision volumes. 
+The topology.json file defines what resources are available to [heketi](https://github.com/heketi/heketi) to provision volumes. 
 - add disks
 - add machines
 
