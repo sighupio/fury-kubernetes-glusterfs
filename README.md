@@ -22,3 +22,14 @@ Following packages are included in Fury Kubernetes Glusterfs roles:
 - [Glusterfs](roles): Gluster is a scalable, distributed file system 
 that aggregates disk storage resources from multiple servers into 
 a single global namespace. Version: **4.X**
+
+
+## Compatibility
+
+| Module Version / Kubernetes Version | 1.14.X             | 1.15.X             | 1.16.X             |
+|-------------------------------------|:------------------:|:------------------:|:------------------:|
+| v1.0.0                              |                    |                    |                    |
+
+- :white_check_mark: Compatible
+- :warning: Has issues
+- :x: Incompatible
